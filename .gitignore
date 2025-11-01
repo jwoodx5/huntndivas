@@ -48,3 +48,7 @@ NUL
 # Avoid Windows device-name ghosts
 NUL
 **/NUL
+
+# Ignore Windows ghost files
+NUL
+**/NUL
