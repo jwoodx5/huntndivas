@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               titlePadding:
                   const EdgeInsetsDirectional.only(start: 16, bottom: 12),
               title: Text(
-                'HuntNDivas',
+                'HuntNDivas!',
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
