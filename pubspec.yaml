@@ -4,39 +4,28 @@ publish_to: 'none'
 
 version: 1.0.1+2   # <name>+<code>
 
-
-environment:
-  sdk: ">=3.3.0 <4.0.0"   # ok for Flutter 3.35.x
+environment:        # 👈 remove the extra “e”
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.8         # 👈 only keep one cupertino_icons
   go_router: ^14.2.0
   google_fonts: ^6.2.1
-  flutter_map: ^6.0.0
+  flutter_map: ^8.2.2
   latlong2: ^0.9.0
-
-
-
-  # Upgrade FMTC to v10+ (compatible with flutter_map 7 + latlong2 0.9)
-  flutter_map_tile_caching: 10.0.0
-
+  flutter_map_tile_caching: ^10.1.1 # 👈 moved up (not under dev)
   geolocator: ^12.0.0
-
-
-
-
-  # --- Added packages for HuntNDivas v2 ---
-  google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
-  cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.4.7
-
+  flutter_launcher_icons: ^0.13.1
+  url_launcher: ^6.3.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^4.0.0
 
 flutter_launcher_icons:
   android: true
@@ -44,24 +33,20 @@ flutter_launcher_icons:
   image_path: "assets/images/HuntNDivas_logo1.png"
   min_sdk_android: 21
 
-
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/
 
 flutter_native_splash:
-  color: 0xFFF6F0EA
-  color_dark: 0xFF1E1E1E
+  color: "#F6F0EA"
+  color_dark: "#1E1E1E"
   image: assets/images/HuntNDivas_logo1.png
   android_12:
-    color: 0xFFF6F0EA
-    color_dark: 0xFF1E1E1E
+    color: "#F6F0EA"
+    color_dark: "#1E1E1E"
     image: assets/images/HuntNDivas_logo1.png
   web: false
-
-
 
 # Example for adding custom fonts later
 # fonts:

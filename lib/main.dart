@@ -5,6 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/map_screen.dart';
+import 'screens/communities_screen.dart';
+import 'screens/gear_screen.dart';
+
+
+
 
 /* =====================  BRAND PALETTE (global)  ===================== */
 const kPrimaryTeal = Color(0xFF2C8FA3); // dominant teal (app bar, accents)
@@ -122,13 +127,15 @@ final _router = GoRouter(
           GoRoute(path: '/home', builder: (_, __) => const MapScreen()),
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/community', builder: (_, __) => const CommunityPage()),
+          GoRoute(path: '/community', builder: (_, __) => const CommunitiesScreen()),
+
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/gear', builder:  (_, __) => const GearTipsPage()),
+          GoRoute(path: '/gear', builder:  (_, __) => const GearScreen()),
         ]),
         StatefulShellBranch(routes: [
-          GoRoute(path: '/mentor', builder:(_, __) => const MentorDirectoryPage()),
+          GoRoute(path: '/gear', builder:  (_, __) => const GearScreen()),
+
         ]),
         StatefulShellBranch(routes: [
           GoRoute(path: '/upgrade', builder:(_, __) => const UpgradePage()),
