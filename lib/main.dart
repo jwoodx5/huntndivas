@@ -2,24 +2,30 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:go_router/go_router.dart';
 import 'screens/map_screen.dart';
-
-void main() => runApp(const HuntNDivasApp());
 
 /* =====================  BRAND PALETTE (global)  ===================== */
 const kPrimaryTeal = Color(0xFF2C8FA3); // dominant teal (app bar, accents)
-const kLightTeal = Color(0xFF48CAE4); // supporting teal
+const kLightTeal = Color(0xFF48CAE4);   // supporting teal
 const kAccentCoral = Color(0xFFFF6B9A); // pink/coral accent
-const kBlushBg = Color(0xFFFEF6F4); // soft blush page background
+const kBlushBg = Color(0xFFFEF6F4);     // soft blush page background
 const kCardSurface = Colors.white;
 const kBodyText = Color(0xFF1E1E1E);
 
 // Soft tints used below the hero
 const kIconTileTint = Color(0xFFFFE6EE); // pink tint behind feature icons
-const kIconTileFg = Color(0xFF7A3A49); // icon color on pink tint
+const kIconTileFg = Color(0xFF7A3A49);   // icon color on pink tint
 const kUpgradePeach = Color(0xFFB2EBF2); // upgrade card background
-const kCtaMauve = Color(0xFF2C8FA3); // bottom CTA button color
+const kCtaMauve = Color(0xFF2C8FA3);     // bottom CTA button color
 /* ==================================================================== */
+
+void main() {
+  // Hash routing avoids GitHub Pages 404s on refresh (/#/gear etc.)
+  setUrlStrategy(const HashUrlStrategy());
+  runApp(const HuntNDivasApp());
+}
 
 class HuntNDivasApp extends StatelessWidget {
   const HuntNDivasApp({super.key});
@@ -35,7 +41,7 @@ class HuntNDivasApp extends StatelessWidget {
       background: kBlushBg,
     );
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'HuntNDivas',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -87,203 +93,53 @@ class HuntNDivasApp extends StatelessWidget {
               ),
             ),
       ),
-      home: const AppShell(),
+      routerConfig: _router,
     );
   }
 }
 
-/// Home with subtle pulse on the "Upgrade to Pro" card
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  bool _pulsing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 900), () {
-      if (!mounted) return;
-      setState(() => _pulsing = true);
-      Future.delayed(const Duration(milliseconds: 700), () {
-        if (!mounted) return;
-        setState(() => _pulsing = false);
-      });
-    });
-  }
-
-  void _go(BuildContext context, Widget page) {
-    Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (_, __, ___) => page,
-      transitionsBuilder: (_, anim, __, child) =>
-          FadeTransition(opacity: anim, child: child),
-      transitionDuration: const Duration(milliseconds: 220),
-    ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
-    return Scaffold(
-      backgroundColor: cs.background,
-      body: CustomScrollView(
-        slivers: [
-          // ----- HERO with teal -> pink gradient -----
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 160,
-            backgroundColor: cs.primary,
-            flexibleSpace: const FlexibleSpaceBar(
-              titlePadding: EdgeInsetsDirectional.only(start: 16, bottom: 12),
-              title: _HeroTitle(),
-              background: _HeroGradient(),
-            ),
-          ),
-
-          // ----- Tagline card -----
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: cs.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Find Your Wild',
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                        )),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Connect · Mentor · Equip',
-                      style: TextStyle(color: cs.onSurfaceVariant),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // ----- Feature list (white cards, pink icon tiles, soft pills) -----
-          SliverList(
-            delegate: SliverChildListDelegate([
-              FeatureTile(
-                icon: Icons.groups_rounded,
-                title: 'Community Feed',
-                subtitle: '—',
-                badge: 'Free',
-                iconTileTint: kIconTileTint,
-                iconTileFg: kIconTileFg,
-                onTap: (ctx) async {
-                  await HapticFeedback.lightImpact();
-                  _go(ctx, const CommunityPage());
-                },
-              ),
-              FeatureTile(
-                icon: Icons.lightbulb_circle_rounded,
-                title: 'Gear & Tips',
-                subtitle: 'Field-tested advice, women-led',
-                badge: 'Free',
-                iconTileTint: kIconTileTint,
-                iconTileFg: kIconTileFg,
-                onTap: (ctx) async {
-                  await HapticFeedback.lightImpact();
-                  _go(ctx, const GearTipsPage());
-                },
-              ),
-
-              // Mentor (Pro) – shows peach pill
-              FeatureTile(
-                icon: Icons.school_rounded,
-                title: 'Mentor Directory',
-                subtitle: 'Get matched with huntresses near you',
-                badge: 'Pro',
-                pro: true,
-                iconTileTint: kIconTileTint,
-                iconTileFg: kIconTileFg,
-                onTap: (ctx) async {
-                  await HapticFeedback.lightImpact();
-                  _go(ctx, const MentorDirectoryPage());
-                },
-              ),
-
-              // Upgrade tile with pulse – peach block like screenshot
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                child: AnimatedScale(
-                  scale: _pulsing ? 1.03 : 1.0,
-                  duration: const Duration(milliseconds: 600),
-                  curve: Curves.easeInOut,
-                  child: FeatureTile(
-                    icon: Icons.workspace_premium_rounded,
-                    title: 'Upgrade to Pro',
-                    subtitle: 'Unlock mentorship, events & pro gear drops',
-                    highlight: true,
-                    highlightColor: kUpgradePeach,
-                    iconTileTint: const Color(0xFFFFDCC7),
-                    iconTileFg: const Color(0xFF6E3F2A),
-                    onTap: (ctx) async {
-                      await HapticFeedback.selectionClick();
-                      _go(ctx, const UpgradePage());
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-            ]),
-          ),
-        ],
-      ),
-
-      // ----- Bottom CTA (mauve) -----
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: FilledButton.icon(
-            onPressed: () => _showQuote(context),
-            icon: const Icon(Icons.auto_awesome),
-            label: const Text('Inspire me'),
-          ),
+/* =====================  ROUTER (tabs with preserved state)  ===================== */
+final _router = GoRouter(
+  initialLocation: '/home',
+  routes: [
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navShell) => Scaffold(
+        body: SafeArea(child: navShell),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: navShell.currentIndex,
+          onDestinationSelected: navShell.goBranch,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.map_outlined),      label: 'Map'),
+            NavigationDestination(icon: Icon(Icons.groups_2_outlined), label: 'Community'),
+            NavigationDestination(icon: Icon(Icons.lightbulb_outline), label: 'Gear'),
+            NavigationDestination(icon: Icon(Icons.school_outlined),   label: 'Mentor'),
+            NavigationDestination(icon: Icon(Icons.workspace_premium), label: 'Upgrade'),
+          ],
         ),
       ),
-    );
-  }
+      branches: [
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/home', builder: (_, __) => const MapScreen()),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/community', builder: (_, __) => const CommunityPage()),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/gear', builder:  (_, __) => const GearTipsPage()),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/mentor', builder:(_, __) => const MentorDirectoryPage()),
+        ]),
+        StatefulShellBranch(routes: [
+          GoRoute(path: '/upgrade', builder:(_, __) => const UpgradePage()),
+        ]),
+      ],
+    ),
+  ],
+);
 
-  void _showQuote(BuildContext context) {
-    const quotes = [
-      'She doesn’t wait for permission—she finds her wild.',
-      'Boots on. Head up. The woods are calling.',
-      'Strong women raise strong huntresses.',
-      'The trail builds the woman.',
-    ];
-    quotes.shuffle();
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Daily inspiration'),
-        content: Text(quotes.first),
-      ),
-    );
-  }
-}
+/* =====================  REUSABLE UI BITS FROM YOUR FILE  ===================== */
 
-// ----- HERO bits -----
 class _HeroTitle extends StatelessWidget {
   const _HeroTitle();
   @override
@@ -392,7 +248,7 @@ class FeatureTile extends StatelessWidget {
                         const SizedBox(width: 8),
                         _Badge(text: badge!, pro: pro),
                       ],
-                    ]),
+                    ]), 
                     if (subtitle != null) ...[
                       const SizedBox(height: 6),
                       Text(
@@ -444,7 +300,8 @@ class _Badge extends StatelessWidget {
   }
 }
 
-// -------- Stub pages --------
+/* =====================  STUB PAGES (same look/feel)  ===================== */
+
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
   @override
@@ -491,8 +348,8 @@ class UpgradePage extends StatelessWidget {
                   context: context,
                   builder: (_) => const AlertDialog(
                     title: Text('Coming soon'),
-                    content: Text(
-                        'In-app purchase will be enabled in a later build.'),
+                    content:
+                        Text('In-app purchase will be enabled in a later build.'),
                   ),
                 );
               },
@@ -527,44 +384,6 @@ class _Bullet extends StatelessWidget {
           Icon(Icons.check_circle_rounded, color: cs.primary),
           const SizedBox(width: 8),
           Expanded(child: Text(text)),
-        ],
-      ),
-    );
-  }
-}
-
-class AppShell extends StatefulWidget {
-  const AppShell({super.key});
-  @override
-  State<AppShell> createState() => _AppShellState();
-}
-
-class _AppShellState extends State<AppShell> {
-  int _index = 0;
-
-  // Order of tabs (must match items below)
-  late final List<Widget> _pages = const [
-    MapScreen(),          // 0
-    CommunityPage(),      // 1
-    GearTipsPage(),       // 2
-    MentorDirectoryPage(),// 3
-    UpgradePage(),        // 4
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: _index, children: _pages),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.map_outlined),      label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.groups_2_outlined), label: 'Community'),
-          BottomNavigationBarItem(icon: Icon(Icons.lightbulb_outline), label: 'Gear'),
-          BottomNavigationBarItem(icon: Icon(Icons.school_outlined),   label: 'Mentor'),
-          BottomNavigationBarItem(icon: Icon(Icons.workspace_premium), label: 'Upgrade'),
         ],
       ),
     );

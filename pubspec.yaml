@@ -6,14 +6,16 @@ version: 1.0.1+2   # <name>+<code>
 
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"   # ok for Flutter 3.35.x
 
 dependencies:
   flutter:
     sdk: flutter
+  go_router: ^14.2.0
+  google_fonts: ^6.2.1
+  flutter_map: ^6.0.0
+  latlong2: ^0.9.0
 
-  flutter_map: 7.0.2
-  latlong2: ^0.9.1
 
 
   # Upgrade FMTC to v10+ (compatible with flutter_map 7 + latlong2 0.9)
