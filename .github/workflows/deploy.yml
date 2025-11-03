@@ -30,7 +30,8 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter Web
-        run: flutter build web --release --no-tree-shake-icons --no-wasm-dry-run --base-href "/huntndivas/"
+        run: flutter build web --release --no-tree-shake-icons --no-wasm-dry-run --base-href "/huntndivas/" --pwa-strategy=none
+
 
 
       - name: Deploy to GitHub Pages
