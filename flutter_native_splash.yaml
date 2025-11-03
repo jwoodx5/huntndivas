@@ -1,0 +1,6 @@
+flutter_native_splash:
+  web: true
+  color: "#48CAE4"
+  image: "web/icons/huntndivas_icon-512.png"
+  android: false
+  ios: false

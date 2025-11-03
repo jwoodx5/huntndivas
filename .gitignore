@@ -52,3 +52,6 @@ NUL
 # Ignore Windows ghost files
 NUL
 **/NUL
+
+# Local Netlify folder
+.netlify
