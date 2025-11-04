@@ -2,7 +2,7 @@ name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
-    branches: [ main ]   # change to master if your branch uses that name
+    branches: [ main ]     # use master if that's your default
 
 permissions:
   contents: write
@@ -17,23 +17,24 @@ jobs:
       - name: Setup Java (needed for Flutter)
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.7'   # match your version shown in the build log
-          channel: 'stable'
+          flutter-version: '3.35.7'
+          channel: stable
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter web
+      - name: Build Flutter web (no PWA cache)
         run: flutter build web --release --base-href "/huntndivas/" --pwa-strategy=none
 
-
-
+      # Safety: if anything created a service worker file, remove it before deploy
+      - name: Remove service worker (safety)
+        run: rm -f build/web/flutter_service_worker.js
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
