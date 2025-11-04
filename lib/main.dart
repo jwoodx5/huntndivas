@@ -4,26 +4,27 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+
+import 'screens/home_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/communities_screen.dart';
 import 'screens/gear_screen.dart';
-
-
-
+import 'screens/mentor_page.dart';
+import 'screens/learn/deer_101_screen.dart';
 
 /* =====================  BRAND PALETTE (global)  ===================== */
 const kPrimaryTeal = Color(0xFF2C8FA3); // dominant teal (app bar, accents)
-const kLightTeal = Color(0xFF48CAE4);   // supporting teal
+const kLightTeal = Color(0xFF48CAE4); // supporting teal
 const kAccentCoral = Color(0xFFFF6B9A); // pink/coral accent
-const kBlushBg = Color(0xFFFEF6F4);     // soft blush page background
+const kBlushBg = Color(0xFFFEF6F4); // soft blush page background
 const kCardSurface = Colors.white;
 const kBodyText = Color(0xFF1E1E1E);
 
 // Soft tints used below the hero
 const kIconTileTint = Color(0xFFFFE6EE); // pink tint behind feature icons
-const kIconTileFg = Color(0xFF7A3A49);   // icon color on pink tint
+const kIconTileFg = Color(0xFF7A3A49); // icon color on pink tint
 const kUpgradePeach = Color(0xFFB2EBF2); // upgrade card background
-const kCtaMauve = Color(0xFF2C8FA3);     // bottom CTA button color
+const kCtaMauve = Color(0xFF2C8FA3); // bottom CTA button color
 /* ==================================================================== */
 
 void main() {
@@ -114,32 +115,62 @@ final _router = GoRouter(
           selectedIndex: navShell.currentIndex,
           onDestinationSelected: navShell.goBranch,
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.map_outlined),      label: 'Map'),
-            NavigationDestination(icon: Icon(Icons.groups_2_outlined), label: 'Community'),
-            NavigationDestination(icon: Icon(Icons.lightbulb_outline), label: 'Gear'),
-            NavigationDestination(icon: Icon(Icons.school_outlined),   label: 'Mentor'),
-            NavigationDestination(icon: Icon(Icons.workspace_premium), label: 'Upgrade'),
+            NavigationDestination(
+                icon: Icon(Icons.home_outlined), label: 'Home'),
+            NavigationDestination(icon: Icon(Icons.map_outlined), label: 'Map'),
+            NavigationDestination(
+                icon: Icon(Icons.groups_2_outlined), label: 'Community'),
+            NavigationDestination(
+                icon: Icon(Icons.lightbulb_outline), label: 'Gear'),
+            NavigationDestination(
+                icon: Icon(Icons.school_outlined), label: 'Mentor'),
+            NavigationDestination(
+                icon: Icon(Icons.workspace_premium), label: 'Upgrade'),
           ],
         ),
       ),
       branches: [
-        StatefulShellBranch(routes: [
-          GoRoute(path: '/home', builder: (_, __) => const MapScreen()),
-        ]),
-        StatefulShellBranch(routes: [
-          GoRoute(path: '/community', builder: (_, __) => const CommunitiesScreen()),
-
-        ]),
-        StatefulShellBranch(routes: [
-          GoRoute(path: '/gear', builder:  (_, __) => const GearScreen()),
-        ]),
-        StatefulShellBranch(routes: [
-          GoRoute(path: '/gear', builder:  (_, __) => const GearScreen()),
-
-        ]),
-        StatefulShellBranch(routes: [
-          GoRoute(path: '/upgrade', builder:(_, __) => const UpgradePage()),
-        ]),
+        // 0: Home (new first tab)
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
+          ],
+        ),
+        // 1: Map
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/map', builder: (_, __) => const MapScreen()),
+          ],
+        ),
+        // 2: Community
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+                path: '/community',
+                builder: (_, __) => const CommunitiesScreen()),
+          ],
+        ),
+        // 3: Gear
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/gear', builder: (_, __) => const GearScreen()),
+          ],
+        ),
+        // 4: Mentor
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/mentor', builder: (_, __) => const MentorPage()),
+            GoRoute(
+                path: '/learn/deer101',
+                builder: (_, __) => const Deer101Screen()),
+          ],
+        ),
+        // 5: Upgrade
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/upgrade', builder: (_, __) => const UpgradePage()),
+          ],
+        ),
       ],
     ),
   ],
@@ -255,7 +286,7 @@ class FeatureTile extends StatelessWidget {
                         const SizedBox(width: 8),
                         _Badge(text: badge!, pro: pro),
                       ],
-                    ]), 
+                    ]),
                     if (subtitle != null) ...[
                       const SizedBox(height: 6),
                       Text(
@@ -355,8 +386,8 @@ class UpgradePage extends StatelessWidget {
                   context: context,
                   builder: (_) => const AlertDialog(
                     title: Text('Coming soon'),
-                    content:
-                        Text('In-app purchase will be enabled in a later build.'),
+                    content: Text(
+                        'In-app purchase will be enabled in a later build.'),
                   ),
                 );
               },
