@@ -29,8 +29,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter Web
-        run: flutter build web --release --no-tree-shake-icons --no-wasm-dry-run --base-href "/huntndivas/" 
+      - name: Build Flutter web
+        run: flutter build web --release --base-href "/huntndivas/" --pwa-strategy=none
+
 
 
 
