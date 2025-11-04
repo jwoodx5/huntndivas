@@ -1,0 +1,17 @@
+{
+  "name": "HuntNDivas — Find Your Wild",
+  "short_name": "HuntNDivas",
+  "description": "Empowering women who hunt, fish, and live the outdoor lifestyle.",
+  "start_url": "/huntndivas/",
+  "scope": "/huntndivas/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#48CAE4",
+  "theme_color": "#48CAE4",
+  "icons": [
+    { "src": "icons/huntndivas_icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/huntndivas_icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["lifestyle", "sports", "social"],
+  "prefer_related_applications": false
+}
